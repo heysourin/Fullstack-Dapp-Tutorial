@@ -45,12 +45,14 @@ function App() {
   async function requestAccount() {
     await window.ethereum.request({ method: "eth_requestAccounts" });
   }
+
   async function handleSubmit(event) {
     event.preventDefault();
     await setGreeting(event.target.greetingInput.value);
     setGreetingValue(event.target.greetingInput.value);
     event.target.greetingInput.value = "";
   }
+  
   return (
     <div className="w-full max-w-lg container">
       <div className="shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-4">
