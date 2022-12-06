@@ -1,31 +1,26 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
 import Greeter from "./artifacts/contracts/Greeter.sol/Greeter.json";
-//'Greeter.sol' in the above line is a folder
 
 const greeterAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 function App() {
   const [greeting, setGreetingValue] = useState("");
 
-  // We need a fucntion to fetch data from blockchain to frontend
   async function fetchGreeting() {
     if (typeof window.ethereum !== "undefined") {
-      // If window.ethereum is defined.
-
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const contract = new ethers.Contract(
         greeterAddress,
         Greeter.abi,
         provider
       );
-
       try {
         const data = await contract.greet();
         setGreetingValue(data);
-        console.log(`Greet data: ${data}`);
+        console.log("data: ", data);
       } catch (err) {
-        console.log(`Error: ${err}`);
+        console.log("Error: ", err);
       }
     }
   }
@@ -34,14 +29,12 @@ function App() {
     if (!value) return;
     if (!typeof window.ethereum !== "undefined") {
       await requestAccount();
-
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner(); //! When we need to edit the contract
+      const signer = provider.getSigner();
       const contract = new ethers.Contract(greeterAddress, Greeter.abi, signer);
-
       const transaction = await contract.setGreeting(value);
       await transaction.wait();
-      fetchGreeting();// New value to print automatically
+      fetchGreeting();
     }
   }
 
