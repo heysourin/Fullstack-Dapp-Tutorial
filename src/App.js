@@ -11,6 +11,8 @@ function App() {
   // We need a fucntion to fetch data from blockchain to frontend
   async function fetchGreeting() {
     if (typeof window.ethereum !== "undefined") {
+      // If window.ethereum is defined.
+
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const contract = new ethers.Contract(
         greeterAddress,
@@ -23,7 +25,7 @@ function App() {
         setGreetingValue(data);
         console.log(`Greet data: ${data}`);
       } catch (err) {
-        console.log(err);
+        console.log(`Error: ${err}`);
       }
     }
   }
@@ -34,11 +36,12 @@ function App() {
       await requestAccount();
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const signer = provider.getSigner(); //! When we need to edit the contract
       const contract = new ethers.Contract(greeterAddress, Greeter.abi, signer);
+
       const transaction = await contract.setGreeting(value);
       await transaction.wait();
-      fetchGreeting();
+      fetchGreeting();// New value to print automatically
     }
   }
 
@@ -52,7 +55,7 @@ function App() {
     setGreetingValue(event.target.greetingInput.value);
     event.target.greetingInput.value = "";
   }
-  
+
   return (
     <div className="w-full max-w-lg container">
       <div className="shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-4">
